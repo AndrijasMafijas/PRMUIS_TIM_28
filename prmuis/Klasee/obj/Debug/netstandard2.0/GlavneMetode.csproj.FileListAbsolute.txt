@@ -1,0 +1,11 @@
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\bin\Debug\netstandard2.0\GlavneMetode.deps.json
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\bin\Debug\netstandard2.0\GlavneMetode.dll
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\bin\Debug\netstandard2.0\GlavneMetode.pdb
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\GlavneMetode.csproj.AssemblyReference.cache
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\GlavneMetode.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\GlavneMetode.AssemblyInfoInputs.cache
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\GlavneMetode.AssemblyInfo.cs
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\GlavneMetode.csproj.CoreCompileInputs.cache
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\GlavneMetode.sourcelink.json
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\GlavneMetode.dll
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\GlavneMetode.pdb

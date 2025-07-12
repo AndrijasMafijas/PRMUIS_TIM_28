@@ -1,0 +1,22 @@
+D:\PRMUIS\prmuis\Klasee\bin\Debug\netstandard2.0\Klasee.deps.json
+D:\PRMUIS\prmuis\Klasee\bin\Debug\netstandard2.0\Klasee.dll
+D:\PRMUIS\prmuis\Klasee\bin\Debug\netstandard2.0\Klasee.pdb
+D:\PRMUIS\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.csproj.AssemblyReference.cache
+D:\PRMUIS\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.GeneratedMSBuildEditorConfig.editorconfig
+D:\PRMUIS\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.AssemblyInfoInputs.cache
+D:\PRMUIS\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.AssemblyInfo.cs
+D:\PRMUIS\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.csproj.CoreCompileInputs.cache
+D:\PRMUIS\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.sourcelink.json
+D:\PRMUIS\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.dll
+D:\PRMUIS\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.pdb
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\bin\Debug\netstandard2.0\Klasee.deps.json
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\bin\Debug\netstandard2.0\Klasee.dll
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\bin\Debug\netstandard2.0\Klasee.pdb
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.csproj.AssemblyReference.cache
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.AssemblyInfoInputs.cache
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.AssemblyInfo.cs
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.csproj.CoreCompileInputs.cache
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.sourcelink.json
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.dll
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\obj\Debug\netstandard2.0\Klasee.pdb

@@ -1,0 +1,28 @@
+D:\PRMUIS\Projekat\Server\bin\Debug\Server.exe.config
+D:\PRMUIS\Projekat\Server\bin\Debug\Server.exe
+D:\PRMUIS\Projekat\Server\bin\Debug\Server.pdb
+D:\PRMUIS\Projekat\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+D:\PRMUIS\Projekat\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+D:\PRMUIS\Projekat\Server\obj\Debug\Server.exe
+D:\PRMUIS\Projekat\Server\obj\Debug\Server.pdb
+D:\PRMUIS\prmuis\Server\bin\Debug\Server.exe.config
+D:\PRMUIS\prmuis\Server\bin\Debug\Server.exe
+D:\PRMUIS\prmuis\Server\bin\Debug\Server.pdb
+D:\PRMUIS\prmuis\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+D:\PRMUIS\prmuis\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+D:\PRMUIS\prmuis\Server\obj\Debug\Server.exe
+D:\PRMUIS\prmuis\Server\obj\Debug\Server.pdb
+D:\PRMUIS\prmuis\Server\bin\Debug\Klasee.dll
+D:\PRMUIS\prmuis\Server\bin\Debug\Klasee.pdb
+D:\PRMUIS\prmuis\Server\obj\Debug\Server.csproj.Up2Date
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\bin\Debug\Server.exe.config
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\bin\Debug\Server.exe
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\bin\Debug\Server.pdb
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\obj\Debug\Server.exe.config
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\obj\Debug\Server.csproj.Up2Date
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\obj\Debug\Server.exe
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\obj\Debug\Server.pdb
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\bin\Debug\GlavneMetode.dll
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\bin\Debug\GlavneMetode.pdb
