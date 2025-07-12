@@ -40,7 +40,7 @@ Ovaj projekat implementira:
 
 1. Klonirajte repozitorijum:  
    ```bash
-   git clone [https://github.com/tvojusername/SecureComm.git](https://github.com/AndrijasMafijas/PRMUIS_TIM_28.git)
+   git clone https://github.com/AndrijasMafijas/PRMUIS_TIM_28.git
 
 2. Izgradite projekat u Visual Studio ili iz komandne linije (prmuis -> server -> server.sln)
 
