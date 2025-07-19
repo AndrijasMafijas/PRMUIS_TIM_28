@@ -26,3 +26,14 @@ C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\obj\Debug\Server.exe
 C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\obj\Debug\Server.pdb
 C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\bin\Debug\GlavneMetode.dll
 C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Server\bin\Debug\GlavneMetode.pdb
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\PRMUIS_TIM_28\prmuis\Server\bin\Debug\Server.exe.config
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\PRMUIS_TIM_28\prmuis\Server\bin\Debug\Server.exe
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\PRMUIS_TIM_28\prmuis\Server\bin\Debug\Server.pdb
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\PRMUIS_TIM_28\prmuis\Server\bin\Debug\GlavneMetode.dll
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\PRMUIS_TIM_28\prmuis\Server\bin\Debug\GlavneMetode.pdb
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\PRMUIS_TIM_28\prmuis\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\PRMUIS_TIM_28\prmuis\Server\obj\Debug\Server.exe.config
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\PRMUIS_TIM_28\prmuis\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\PRMUIS_TIM_28\prmuis\Server\obj\Debug\Server.csproj.Up2Date
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\PRMUIS_TIM_28\prmuis\Server\obj\Debug\Server.exe
+C:\Users\Korisnik\Desktop\PRMUIS Projekat\PRMUIS_TIM_28\prmuis\Server\obj\Debug\Server.pdb

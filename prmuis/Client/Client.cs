@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using GlavneMetode.Helpers;
 using GlavneMetode.RSA;
+using GlavneMetode.Models;
 
 namespace Client
 {
@@ -86,10 +87,21 @@ namespace Client
                 Console.WriteLine("[INFO] Poslat klijentov javni RSA ključ.");
             }
 
-            if (protokol == 1) // TCP komunikacija
+            NacinKomunikacije komunikacija = null;
+            EndPoint serverEndPoint = new IPEndPoint(ipAddress, port);
+            string algoritamStr = sifra == 1 ? "3DES" : "RSA";
+            string kljucStr = "";
+            if (sifra == 1 && keySymmetric != null)
+                kljucStr = Convert.ToBase64String(keySymmetric);
+            else if (sifra == 2)
+                kljucStr = serverPublicKey ?? "RSA_KEY";
+            
+            if (protokol == 1) // TCP
             {
-                Socket tcpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                tcpSocket.Connect(ipAddress, port);
+                //System.Threading.Thread.Sleep(3000);
+                komunikacija = new NacinKomunikacije(1, algoritamStr, kljucStr, null);
+                komunikacija.clientSocket.Connect(serverEndPoint);
+                Console.WriteLine($"[DEBUG] Klijent pokušava konekciju na: {serverEndPoint}");
                 Console.WriteLine("[INFO] TCP konekcija uspostavljena.");
 
                 while (true)
@@ -102,60 +114,40 @@ namespace Client
                     string combined = msg + "|" + hash;
 
                     byte[] encrypted;
-
                     if (sifra == 1)
-                    {
                         encrypted = TripleDES.Encrypt3DES(combined, keySymmetric);
-                    }
                     else if (sifra == 2)
-                    {
                         encrypted = RSAEncryption.Encrypt(combined, serverPublicKey);
-                    }
                     else
-                    {
                         throw new Exception("Nepodržan algoritam");
-                    }
 
-                    tcpSocket.Send(encrypted);
+                    komunikacija.Send(encrypted);
                     if (msg.ToLower() == "kraj") break;
 
-                    int len = tcpSocket.Receive(buffer);
+                    int len = komunikacija.Receive(buffer);
                     byte[] receivedData = new byte[len];
                     Array.Copy(buffer, receivedData, len);
 
                     string response;
-
                     if (sifra == 1)
-                    {
                         response = TripleDES.Decrypt3DES(receivedData, keySymmetric);
-                    }
                     else if (sifra == 2)
                     {
-                        try
-                        {
-                            response = RSAEncryption.Decrypt(receivedData, clientPrivateKey);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("[GRESKA] RSA dekriptovanje odgovora neuspelo: " + e.Message);
-                            response = "";
-                        }
+                        try { response = RSAEncryption.Decrypt(receivedData, clientPrivateKey); }
+                        catch (Exception e) { Console.WriteLine("[GRESKA] RSA dekriptovanje odgovora neuspelo: " + e.Message); response = ""; }
                     }
                     else
-                    {
                         response = Encoding.UTF8.GetString(receivedData);
-                    }
 
                     PrintResponse(response);
                 }
-
-                tcpSocket.Close();
+                komunikacija.Close();
             }
-            else // UDP komunikacija
+            else // UDP
             {
-                udpClient = new UdpClient();
-                udpClient.Connect(ipAddress, port);
-                IPEndPoint serverUdpEP = null;
+                komunikacija = new NacinKomunikacije(2, algoritamStr, kljucStr, new IPEndPoint(IPAddress.Any, 0));
+                komunikacija.clientSocket.Connect(serverEndPoint);
+                EndPoint serverUdpEP = serverEndPoint;
 
                 while (true)
                 {
@@ -167,52 +159,34 @@ namespace Client
                     string combined = msg + "|" + hash;
 
                     byte[] encrypted;
-
                     if (sifra == 1)
-                    {
                         encrypted = TripleDES.Encrypt3DES(combined, keySymmetric);
-                    }
                     else if (sifra == 2)
-                    {
                         encrypted = RSAEncryption.Encrypt(combined, serverPublicKey);
-                    }
                     else
-                    {
                         throw new Exception("Nepodržan algoritam");
-                    }
 
-                    udpClient.Send(encrypted, encrypted.Length);
+                    komunikacija.SendTo(encrypted, serverUdpEP);
                     if (msg.ToLower() == "kraj") break;
 
-                    byte[] responseBytes = udpClient.Receive(ref serverUdpEP);
+                    int len = komunikacija.Receive(buffer, ref serverUdpEP);
+                    byte[] responseBytes = new byte[len];
+                    Array.Copy(buffer, responseBytes, len);
 
                     string response;
-
                     if (sifra == 1)
-                    {
                         response = TripleDES.Decrypt3DES(responseBytes, keySymmetric);
-                    }
                     else if (sifra == 2)
                     {
-                        try
-                        {
-                            response = RSAEncryption.Decrypt(responseBytes, clientPrivateKey);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("[GRESKA] RSA dekriptovanje odgovora neuspelo: " + e.Message);
-                            response = "";
-                        }
+                        try { response = RSAEncryption.Decrypt(responseBytes, clientPrivateKey); }
+                        catch (Exception e) { Console.WriteLine("[GRESKA] RSA dekriptovanje odgovora neuspelo: " + e.Message); response = ""; }
                     }
                     else
-                    {
                         response = Encoding.UTF8.GetString(responseBytes);
-                    }
 
                     PrintResponse(response);
                 }
-
-                udpClient.Close();
+                komunikacija.Close();
             }
 
             Console.WriteLine("[INFO] Klijent zavrsio.");

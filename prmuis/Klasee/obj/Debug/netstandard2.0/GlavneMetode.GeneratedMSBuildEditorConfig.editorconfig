@@ -1,6 +1,6 @@
 is_global = true
 build_property.RootNamespace = GlavneMetode
-build_property.ProjectDir = C:\Users\Korisnik\Desktop\PRMUIS Projekat\prmuis\Klasee\
+build_property.ProjectDir = c:\Users\Korisnik\Desktop\PRMUIS Projekat\PRMUIS_TIM_28\prmuis\Klasee\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.CsWinRTUseWindowsUIXamlProjections = false

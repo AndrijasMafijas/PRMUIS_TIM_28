@@ -18,7 +18,8 @@ namespace GlavneMetode.Models
             if (x == 1)
             {
                 clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                clientSocket.Bind(recvEndPoint);
+                if (recvEndPoint != null)
+                    clientSocket.Bind(recvEndPoint);
             }
             else
             {

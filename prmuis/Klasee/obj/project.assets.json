@@ -186,11 +186,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\prmuis\\Klasee\\GlavneMetode.csproj",
+      "projectUniqueName": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Klasee\\GlavneMetode.csproj",
       "projectName": "GlavneMetode",
-      "projectPath": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\prmuis\\Klasee\\GlavneMetode.csproj",
+      "projectPath": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Klasee\\GlavneMetode.csproj",
       "packagesPath": "C:\\Users\\Korisnik\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\prmuis\\Klasee\\obj\\",
+      "outputPath": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Klasee\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cYcwOW4rnLM=",
+  "dgSpecHash": "L1T/pxYp5t4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\prmuis\\Klasee\\GlavneMetode.csproj",
+  "projectFilePath": "c:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Klasee\\GlavneMetode.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Korisnik\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\Korisnik\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"

@@ -1,0 +1,83 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Server\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{AD8D120E-69B2-45CF-9226-83E05145E06D}|Server.csproj|c:\\users\\korisnik\\desktop\\prmuis projekat\\prmuis_tim_28\\prmuis\\server\\tcp\\starttcprsa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AD8D120E-69B2-45CF-9226-83E05145E06D}|Server.csproj|solutionrelative:tcp\\starttcprsa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AD8D120E-69B2-45CF-9226-83E05145E06D}|Server.csproj|C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Server\\tcp\\starttcp3des.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AD8D120E-69B2-45CF-9226-83E05145E06D}|Server.csproj|solutionrelative:tcp\\starttcp3des.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A9A9224-18C4-4DD5-A024-E26719405FB3}|..\\Klasee\\GlavneMetode.csproj|c:\\users\\korisnik\\desktop\\prmuis projekat\\prmuis_tim_28\\prmuis\\klasee\\models\\nacinkomunikacije.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0580538B-1DB7-4148-B0C0-0AD60C3BE5F1}|..\\Client\\Client.csproj|c:\\users\\korisnik\\desktop\\prmuis projekat\\prmuis_tim_28\\prmuis\\client\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StartTcpRsa.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Server\\TCP\\StartTcpRsa.cs",
+              "RelativeDocumentMoniker": "TCP\\StartTcpRsa.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Server\\TCP\\StartTcpRsa.cs",
+              "RelativeToolTip": "TCP\\StartTcpRsa.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAgwJAAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T19:15:00.502Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "StartTcp3Des.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Server\\TCP\\StartTcp3Des.cs",
+              "RelativeDocumentMoniker": "TCP\\StartTcp3Des.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Server\\TCP\\StartTcp3Des.cs",
+              "RelativeToolTip": "TCP\\StartTcp3Des.cs",
+              "ViewState": "AgIAAGwAAAAAAAAAAAAQwJIAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T19:14:08.77Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Client.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Client\\Client.cs",
+              "RelativeDocumentMoniker": "..\\Client\\Client.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Client\\Client.cs",
+              "RelativeToolTip": "..\\Client\\Client.cs",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAQwGQAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T18:52:51.361Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "NacinKomunikacije.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Klasee\\Models\\NacinKomunikacije.cs",
+              "RelativeDocumentMoniker": "..\\Klasee\\Models\\NacinKomunikacije.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PRMUIS Projekat\\PRMUIS_TIM_28\\prmuis\\Klasee\\Models\\NacinKomunikacije.cs",
+              "RelativeToolTip": "..\\Klasee\\Models\\NacinKomunikacije.cs",
+              "ViewState": "AgIAAG0AAAAAAAAAAAAowF0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T18:51:17.91Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

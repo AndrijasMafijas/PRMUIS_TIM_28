@@ -15,147 +15,134 @@ namespace Server
         {
             Console.WriteLine($"[INFO] TCP Server sa RSA na portu {port}...");
 
-            Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            listener.Bind(new IPEndPoint(IPAddress.Any, port));
-            listener.Listen(10);
-            listener.Blocking = false;
+            NacinKomunikacije listener = new NacinKomunikacije(1, "RSA", "", new IPEndPoint(IPAddress.Any, port));
+            //listener.clientSocket.Blocking = false;
+            listener.Listen(10); // OVO JE KLJUČNO!
+            Console.WriteLine($"[DEBUG] TCP server bindovan na: {listener.clientSocket.LocalEndPoint}");
 
-            List<Socket> clients = new List<Socket>();
-
-            // Mapiranje klijentskog soketa na njihov javni RSA ključ
-            Dictionary<Socket, string> clientPublicKeys = new Dictionary<Socket, string>();
+            List<NacinKomunikacije> clients = new List<NacinKomunikacije>();
+            Dictionary<NacinKomunikacije, string> clientPublicKeys = new Dictionary<NacinKomunikacije, string>();
 
             Console.WriteLine("[INFO] Server spreman, čeka nove klijente...");
 
             while (true)
             {
-                List<Socket> readList = new List<Socket>(clients) { listener };
-                Socket.Select(readList, null, null, 1000000); // timeout = 1 sekunda
+                List<NacinKomunikacije> allConnections = new List<NacinKomunikacije>(clients) { listener };
+                List<Socket> socketList = allConnections.Select(c => c.clientSocket).ToList();
+                Socket.Select(socketList, null, null, 1000000);
+                List<NacinKomunikacije> zaUkloniti = new List<NacinKomunikacije>();
 
-                List<Socket> zaUkloniti = new List<Socket>();
-
-                foreach (Socket socket in readList)
+                // Prvo obradi nove konekcije
+                if (socketList.Contains(listener.clientSocket))
                 {
-                    if (socket == listener)
+                    try
                     {
-                        try
+                        Socket newClientSocket = listener.Accept();
+                        var newKom = new NacinKomunikacije(1, "RSA", "", newClientSocket.RemoteEndPoint);
+                        newKom.clientSocket = newClientSocket;
+                        clients.Add(newKom);
+                        Console.WriteLine($"[INFO] Novi klijent povezan: {newClientSocket.RemoteEndPoint} (RSA)");
+
+                        string clientId = ((IPEndPoint)newClientSocket.RemoteEndPoint).Address.ToString();
+                        if (Server.udpClientKeys.TryGetValue(clientId, out var kljucevi))
                         {
-                            Socket newClient = listener.Accept();
-                            newClient.Blocking = false;
-                            clients.Add(newClient);
-                            Console.WriteLine($"[INFO] Novi klijent povezan: {newClient.RemoteEndPoint} (RSA)");
-
-                            // Pretpostavljamo da je server već u globalnoj mapi udpClientKeys
-                            // sačuvao javni ključ klijenta preko IP adrese
-                            string clientId = ((IPEndPoint)newClient.RemoteEndPoint).Address.ToString();
-
-                            if (Server.udpClientKeys.TryGetValue(clientId, out var kljucevi))
+                            string clientPublicKey = kljucevi.clientPublicKey;
+                            if (!string.IsNullOrEmpty(clientPublicKey))
                             {
-                                string clientPublicKey = kljucevi.clientPublicKey;
-                                if (!string.IsNullOrEmpty(clientPublicKey))
-                                {
-                                    clientPublicKeys[newClient] = clientPublicKey;
-                                    Console.WriteLine($"[INFO] Javni ključ klijenta sačuvan za {newClient.RemoteEndPoint}");
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"[WARN] Nema javnog ključa za klijenta {newClient.RemoteEndPoint}");
-                                }
+                                clientPublicKeys[newKom] = clientPublicKey;
+                                Console.WriteLine($"[INFO] Javni ključ klijenta sačuvan za {newClientSocket.RemoteEndPoint}");
                             }
                             else
                             {
-                                Console.WriteLine($"[WARN] Nema podataka o klijentu {newClient.RemoteEndPoint} u udpClientKeys.");
+                                Console.WriteLine($"[WARN] Nema javnog ključa za klijenta {newClientSocket.RemoteEndPoint}");
                             }
                         }
-                        catch { }
-                    }
-                    else
-                    {
-                        byte[] buffer = new byte[4096];
-                        int received = 0;
-
-                        try
+                        else
                         {
-                            received = socket.Receive(buffer);
-                        }
-                        catch (SocketException)
-                        {
-                            Console.WriteLine($"[GRESKA] Socket greška kod {socket.RemoteEndPoint}, uklanjam klijenta.");
-                            zaUkloniti.Add(socket);
-                            continue;
-                        }
-
-                        if (received == 0)
-                        {
-                            Console.WriteLine($"[INFO] Klijent {socket.RemoteEndPoint} je zatvorio konekciju.");
-                            zaUkloniti.Add(socket);
-                            continue;
-                        }
-
-                        byte[] encryptedMsg = new byte[received];
-                        Array.Copy(buffer, encryptedMsg, received);
-
-                        string decryptedMsg;
-                        try
-                        {
-                            decryptedMsg = RSAEncryption.Decrypt(encryptedMsg, serverPrivateKey);
-                            RSAStats.TotalMessages++;
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine($"[GRESKA] RSA dešifrovanje neuspešno za {socket.RemoteEndPoint}: {e.Message}");
-                            continue;
-                        }
-
-                        Console.WriteLine($"[PRIMLJENO od {socket.RemoteEndPoint}] {decryptedMsg}");
-
-                        if (decryptedMsg.Contains("kraj"))
-                        {
-                            Console.WriteLine($"[INFO] Klijent {socket.RemoteEndPoint} se diskonektovao komandom 'kraj'.");
-                            zaUkloniti.Add(socket);
-                            continue;
-                        }
-
-                        Console.Write($"[ODGOVOR za {socket.RemoteEndPoint}]: ");
-                        string odgovor = Console.ReadLine();
-
-                        try
-                        {
-                            if (!clientPublicKeys.TryGetValue(socket, out string clientPublicKey) || string.IsNullOrEmpty(clientPublicKey))
-                            {
-                                Console.WriteLine($"[WARN] Nema javnog ključa klijenta {socket.RemoteEndPoint}, šaljem odgovor nešifrovano.");
-                                byte[] plainBytes = Encoding.UTF8.GetBytes(odgovor);
-                                socket.Send(plainBytes);
-                            }
-                            else
-                            {
-                                byte[] encryptedResponse = RSAEncryption.Encrypt(odgovor, clientPublicKey);
-                                socket.Send(encryptedResponse);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine($"[GRESKA] Ne mogu poslati odgovor: {e.Message}");
-                            zaUkloniti.Add(socket);
-                            continue;
-                        }
-
-                        if (odgovor.ToLower() == "kraj")
-                        {
-                            Console.WriteLine($"[INFO] Klijent {socket.RemoteEndPoint} zatvoren komandom 'kraj' sa servera.");
-                            zaUkloniti.Add(socket);
+                            Console.WriteLine($"[WARN] Nema podataka o klijentu {newClientSocket.RemoteEndPoint} u udpClientKeys.");
                         }
                     }
+                    catch { }
                 }
 
-                foreach (var s in zaUkloniti)
+                // Zatim iteriraj kroz klijente i čitaj samo sa spremnih
+                foreach (var komunikacija in clients.ToList())
                 {
-                    try { s.Shutdown(SocketShutdown.Both); } catch { }
-                    s.Close();
-                    clients.Remove(s);
-                    clientPublicKeys.Remove(s);
+                    if (!socketList.Contains(komunikacija.clientSocket))
+                        continue;
+                    byte[] buffer = new byte[4096];
+                    int received = 0;
+                    try
+                    {
+                        received = komunikacija.Receive(buffer);
+                    }
+                    catch (SocketException)
+                    {
+                        Console.WriteLine($"[GRESKA] Socket greška kod {komunikacija.clientSocket.RemoteEndPoint}, uklanjam klijenta.");
+                        zaUkloniti.Add(komunikacija);
+                        continue;
+                    }
+                    if (received == 0)
+                    {
+                        Console.WriteLine($"[INFO] Klijent {komunikacija.clientSocket.RemoteEndPoint} je zatvorio konekciju.");
+                        zaUkloniti.Add(komunikacija);
+                        continue;
+                    }
+                    byte[] encryptedMsg = new byte[received];
+                    Array.Copy(buffer, encryptedMsg, received);
+                    string decryptedMsg;
+                    try
+                    {
+                        decryptedMsg = RSAEncryption.Decrypt(encryptedMsg, serverPrivateKey);
+                        RSAStats.TotalMessages++;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[GRESKA] RSA dešifrovanje neuspešno za {komunikacija.clientSocket.RemoteEndPoint}: {e.Message}");
+                        continue;
+                    }
+                    Console.WriteLine($"[PRIMLJENO od {komunikacija.clientSocket.RemoteEndPoint}] {decryptedMsg}");
+                    if (decryptedMsg.Contains("kraj"))
+                    {
+                        Console.WriteLine($"[INFO] Klijent {komunikacija.clientSocket.RemoteEndPoint} se diskonektovao komandom 'kraj'.");
+                        zaUkloniti.Add(komunikacija);
+                        continue;
+                    }
+                    Console.Write($"[ODGOVOR za {komunikacija.clientSocket.RemoteEndPoint}]: ");
+                    string odgovor = Console.ReadLine();
+                    try
+                    {
+                        if (!clientPublicKeys.TryGetValue(komunikacija, out string clientPublicKey) || string.IsNullOrEmpty(clientPublicKey))
+                        {
+                            Console.WriteLine($"[WARN] Nema javnog ključa klijenta {komunikacija.clientSocket.RemoteEndPoint}, šaljem odgovor nešifrovano.");
+                            byte[] plainBytes = Encoding.UTF8.GetBytes(odgovor);
+                            komunikacija.Send(plainBytes);
+                        }
+                        else
+                        {
+                            byte[] encryptedResponse = RSAEncryption.Encrypt(odgovor, clientPublicKey);
+                            komunikacija.Send(encryptedResponse);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[GRESKA] Ne mogu poslati odgovor: {e.Message}");
+                        zaUkloniti.Add(komunikacija);
+                        continue;
+                    }
+                    if (odgovor.ToLower() == "kraj")
+                    {
+                        Console.WriteLine($"[INFO] Klijent {komunikacija.clientSocket.RemoteEndPoint} zatvoren komandom 'kraj' sa servera.");
+                        zaUkloniti.Add(komunikacija);
+                    }
                 }
-
+                foreach (var k in zaUkloniti)
+                {
+                    try { k.clientSocket.Shutdown(SocketShutdown.Both); } catch { }
+                    k.Close();
+                    clients.Remove(k);
+                    clientPublicKeys.Remove(k);
+                }
                 if (clients.Count == 0)
                 {
                     Console.WriteLine("[INFO] Nema više aktivnih RSA klijenata. Zatvaram TCP RSA server.");

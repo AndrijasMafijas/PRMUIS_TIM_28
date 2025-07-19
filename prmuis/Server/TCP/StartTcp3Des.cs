@@ -16,128 +16,128 @@ namespace Server
         {
             Console.WriteLine($"[INFO] TCP Server sa 3DES na portu {port}...");
 
-            Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            listener.Bind(new IPEndPoint(IPAddress.Any, port));
-            listener.Listen(10);
-            listener.Blocking = false;
+            NacinKomunikacije listener = null;
+            try
+            {
+                listener = new NacinKomunikacije(1, "3DES", Convert.ToBase64String(firstClientKey), new IPEndPoint(IPAddress.Any, port));
+                //listener.clientSocket.Blocking = false;
+                listener.Listen(10);
+                Console.WriteLine($"[DEBUG] TCP server bindovan na: {listener.clientSocket.LocalEndPoint}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[FATAL] Ne mogu da bindujem TCP server: " + ex.Message);
+                return;
+            }
 
-            List<Socket> clients = new List<Socket>();
-            Dictionary<Socket, byte[]> clientKeys = new Dictionary<Socket, byte[]>();
-            Dictionary<Socket, NacinKomunikacije> clientInfo = new Dictionary<Socket, NacinKomunikacije>();
+            List<NacinKomunikacije> clients = new List<NacinKomunikacije>();
+            Dictionary<NacinKomunikacije, byte[]> clientKeys = new Dictionary<NacinKomunikacije, byte[]>();
+            Dictionary<NacinKomunikacije, NacinKomunikacije> clientInfo = new Dictionary<NacinKomunikacije, NacinKomunikacije>();
 
             Console.WriteLine("[INFO] Server spreman, čeka nove klijente...");
 
             while (true)
             {
-                List<Socket> readList = new List<Socket>(clients) { listener };
-                Socket.Select(readList, null, null, 1000000); // timeout = 1 sekunda
+                List<NacinKomunikacije> allConnections = new List<NacinKomunikacije>(clients) { listener };
+                List<Socket> socketList = allConnections.Select(c => c.clientSocket).ToList();
+                Socket.Select(socketList, null, null, 1000000);
+                List<NacinKomunikacije> zaUkloniti = new List<NacinKomunikacije>();
 
-                List<Socket> zaUkloniti = new List<Socket>();
-
-                foreach (Socket socket in readList)
+                // Prvo obradi nove konekcije
+                if (socketList.Contains(listener.clientSocket))
                 {
-                    if (socket == listener)
+                    try
                     {
-                        try
+                        Socket newClientSocket = listener.Accept();
+                        var newKom = new NacinKomunikacije(1, "3DES", listener.Kljuc, newClientSocket.RemoteEndPoint);
+                        newKom.clientSocket = newClientSocket;
+                        clients.Add(newKom);
+
+                        string hashedAlgo = SHAHelper.Hash("3DES");
+                        if (Server.komunikacijePoHesu.TryGetValue(hashedAlgo, out var komunikacijaInfo))
                         {
-                            Socket newClient = listener.Accept();
-                            newClient.Blocking = false;
-                            clients.Add(newClient);
-
-                            string hashedAlgo = SHAHelper.Hash("3DES");
-
-                            if (Server.komunikacijePoHesu.TryGetValue(hashedAlgo, out var komunikacija))
-                            {
-                                clientKeys[newClient] = Convert.FromBase64String(komunikacija.Kljuc);
-                                clientInfo[newClient] = komunikacija;
-
-                                Console.WriteLine($"[INFO] Novi klijent povezan: {newClient.RemoteEndPoint}, koristi {komunikacija.Algoritam}");
-                            }
-                            else
-                            {
-                                Console.WriteLine("[GRESKA] Nema informacija o algoritmu 3DES (heš nije nađen).");
-                                newClient.Close();
-                                continue;
-                            }
+                            clientKeys[newKom] = Convert.FromBase64String(komunikacijaInfo.Kljuc);
+                            clientInfo[newKom] = komunikacijaInfo;
+                            Console.WriteLine($"[INFO] Novi klijent povezan: {newClientSocket.RemoteEndPoint}, koristi {komunikacijaInfo.Algoritam}");
                         }
-                        catch { }
+                        else
+                        {
+                            Console.WriteLine("[GRESKA] Nema informacija o algoritmu 3DES (heš nije nađen).");
+                            newKom.Close();
+                        }
                     }
-                    else
+                    catch { }
+                }
+
+                // Zatim iteriraj kroz klijente i čitaj samo sa spremnih
+                foreach (var komunikacija in clients.ToList())
+                {
+                    if (!socketList.Contains(komunikacija.clientSocket))
+                        continue;
+                    byte[] buffer = new byte[4096];
+                    int received = 0;
+                    try
                     {
-                        byte[] buffer = new byte[4096];
-                        int received = 0;
-
-                        try
-                        {
-                            received = socket.Receive(buffer);
-                        }
-                        catch (SocketException)
-                        {
-                            Console.WriteLine($"[GRESKA] Socket exception za klijenta {socket.RemoteEndPoint}, uklanjam konekciju.");
-                            zaUkloniti.Add(socket);
-                            continue;
-                        }
-
-                        if (received == 0)
-                        {
-                            Console.WriteLine($"[INFO] Klijent {socket.RemoteEndPoint} je prekinuo vezu.");
-                            zaUkloniti.Add(socket);
-                            continue;
-                        }
-
-                        byte[] encryptedData = new byte[received];
-                        Array.Copy(buffer, encryptedData, received);
-
-                        string decryptedMessage;
-                        try
-                        {
-                            decryptedMessage = TripleDES.Decrypt3DES(encryptedData, clientKeys[socket]);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine($"[GRESKA] Dekripcija neuspešna za {socket.RemoteEndPoint}: {e.Message}");
-                            continue;
-                        }
-
-                        Console.WriteLine($"[PRIMLJENO od {socket.RemoteEndPoint}] {decryptedMessage} (Algoritam: {clientInfo[socket].Algoritam})");
-
-                        if (decryptedMessage.Contains("kraj"))
-                        {
-                            Console.WriteLine($"[INFO] Klijent {socket.RemoteEndPoint} se diskonektovao komandom 'kraj'.");
-                            zaUkloniti.Add(socket);
-                            continue;
-                        }
-
-                        Console.Write($"[ODGOVOR za {socket.RemoteEndPoint}]: ");
-                        string odgovor = Console.ReadLine();
-
-                        byte[] encryptedResponse;
-                        try
-                        {
-                            encryptedResponse = TripleDES.Encrypt3DES(odgovor, clientKeys[socket]);
-                            socket.Send(encryptedResponse);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine($"[GRESKA] Slanje poruke neuspešno: {e.Message}");
-                            zaUkloniti.Add(socket);
-                            continue;
-                        }
-
-                        if (odgovor.ToLower() == "kraj")
-                        {
-                            Console.WriteLine($"[INFO] Klijent {socket.RemoteEndPoint} zatvoren komandom 'kraj' sa servera.");
-                            zaUkloniti.Add(socket);
-                        }
+                        received = komunikacija.Receive(buffer);
+                    }
+                    catch (SocketException)
+                    {
+                        Console.WriteLine($"[GRESKA] Socket exception za klijenta {komunikacija.clientSocket.RemoteEndPoint}, uklanjam konekciju.");
+                        zaUkloniti.Add(komunikacija);
+                        continue;
+                    }
+                    if (received == 0)
+                    {
+                        Console.WriteLine($"[INFO] Klijent {komunikacija.clientSocket.RemoteEndPoint} je prekinuo vezu.");
+                        zaUkloniti.Add(komunikacija);
+                        continue;
+                    }
+                    byte[] encryptedData = new byte[received];
+                    Array.Copy(buffer, encryptedData, received);
+                    string decryptedMessage;
+                    try
+                    {
+                        decryptedMessage = TripleDES.Decrypt3DES(encryptedData, clientKeys[komunikacija]);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[GRESKA] Dekripcija neuspešna za {komunikacija.clientSocket.RemoteEndPoint}: {e.Message}");
+                        continue;
+                    }
+                    Console.WriteLine($"[PRIMLJENO od {komunikacija.clientSocket.RemoteEndPoint}] {decryptedMessage} (Algoritam: {clientInfo[komunikacija].Algoritam})");
+                    if (decryptedMessage.Contains("kraj"))
+                    {
+                        Console.WriteLine($"[INFO] Klijent {komunikacija.clientSocket.RemoteEndPoint} se diskonektovao komandom 'kraj'.");
+                        zaUkloniti.Add(komunikacija);
+                        continue;
+                    }
+                    Console.Write($"[ODGOVOR za {komunikacija.clientSocket.RemoteEndPoint}]: ");
+                    string odgovor = Console.ReadLine();
+                    byte[] encryptedResponse;
+                    try
+                    {
+                        encryptedResponse = TripleDES.Encrypt3DES(odgovor, clientKeys[komunikacija]);
+                        komunikacija.Send(encryptedResponse);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[GRESKA] Slanje poruke neuspešno: {e.Message}");
+                        zaUkloniti.Add(komunikacija);
+                        continue;
+                    }
+                    if (odgovor.ToLower() == "kraj")
+                    {
+                        Console.WriteLine($"[INFO] Klijent {komunikacija.clientSocket.RemoteEndPoint} zatvoren komandom 'kraj' sa servera.");
+                        zaUkloniti.Add(komunikacija);
                     }
                 }
-                foreach (var s in zaUkloniti)
+                foreach (var k in zaUkloniti)
                 {
-                    try { s.Shutdown(SocketShutdown.Both); } catch { }
-                    s.Close();
-                    clients.Remove(s);
-                    clientKeys.Remove(s);
-                    clientInfo.Remove(s);
+                    try { k.clientSocket.Shutdown(SocketShutdown.Both); } catch { }
+                    k.Close();
+                    clients.Remove(k);
+                    clientKeys.Remove(k);
+                    clientInfo.Remove(k);
                 }
                 if (clients.Count == 0)
                 {
